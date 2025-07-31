@@ -9,4 +9,16 @@ class Student extends Model
 {
     /** @use HasFactory<\Database\Factories\StudentFactory> */
     use HasFactory;
+    protected $guarded = [];
+
+    
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
+    public function class()
+    {
+        return $this->belongsTo(Classes::class,'class_id');
+    }
+
 }
