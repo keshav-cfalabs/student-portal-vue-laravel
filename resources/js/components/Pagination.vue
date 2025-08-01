@@ -10,7 +10,7 @@ defineProps({
         type: Object,
         required: true,
         default: () => ({
-            students: {we
+            students: {
                 data: []
             }
         })

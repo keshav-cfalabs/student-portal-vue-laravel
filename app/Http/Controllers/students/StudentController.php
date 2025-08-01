@@ -76,14 +76,20 @@ class StudentController extends Controller
     public function update(UpdateStudentRequest $request, Student $student)
     {
         $student->update($request->validated());
-        return redirect()->route('students.index')->with('success', 'Student updated successfully.');
+        return redirect(route('students.index'))->with('success', 'Student updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Student $student)
     {
-        //
+
+        $student->delete();
+        return response()->json([
+            'message' => 'Student deleted successfully.'
+        ]);
+        // Alternatively, you can redirect with a success message
+        // return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
     }
 }

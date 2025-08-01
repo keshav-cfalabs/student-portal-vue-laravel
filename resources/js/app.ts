@@ -6,6 +6,8 @@ import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from 'ziggy-js';
 import { initializeTheme } from './composables/useAppearance';
+import Vue3Toastify from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -16,10 +18,24 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .use(Vue3Toastify, {
+             autoClose: 3000,
+  hideProgressBar: false,
+  closeButton: true,
+  style: {
+    background: 'transparent', // Needed to not override inner styling
+    boxShadow: 'none',
+    padding: 0,
+  },
+  progressStyle: {
+        background: '#eeeeeeff',
+
+  },
+            })
             .mount(el);
     },
     progress: {
-        color: '#4B5563',
+        color: '#eeeeeeff',
     },
 });
 
