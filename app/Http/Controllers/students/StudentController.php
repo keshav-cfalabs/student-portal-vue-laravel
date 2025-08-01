@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\students;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StudentRequest;
+use App\Http\Resources\ClassesResource;
 use App\Http\Resources\StudentResource;
+use App\Models\Classes;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -18,20 +21,25 @@ class StudentController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
-        //
+
+        $classes = ClassesResource::collection(Classes::all());
+
+        return inertia('Students/Create', [
+            'classes' => $classes
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StudentRequest $request)
     {
-        //
+        $validated = $request->validated();
+        Student::create($validated);
+        return redirect()->route('students.index')->with('success', 'Student created successfully.');
     }
 
     /**
@@ -45,9 +53,9 @@ class StudentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Student $student)
     {
-        //
+       
     }
 
     /**

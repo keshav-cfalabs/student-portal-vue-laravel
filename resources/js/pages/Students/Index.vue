@@ -6,6 +6,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import Pagination from '@/components/Pagination.vue';
+import { Link } from '@inertiajs/vue3';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -39,7 +40,13 @@ const deleteStudent = (id) => {
      <AppLayout :breadcrumbs="breadcrumbs">
 
     <div class="container mx-auto px-4 py-6">
-        <h1 class="text-2xl font-bold mb-4">Students List</h1>
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-semibold">Students</h1>
+            <Link :href="route('students.create')" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
+                Create Student
+            </Link>
+
+        </div>
         <table class="min-w-full bg-white border border-gray-200">
             <thead>
                 <tr class="bg-gray-100">

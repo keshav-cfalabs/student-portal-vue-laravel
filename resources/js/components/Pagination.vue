@@ -2,6 +2,8 @@
 // import { usePage } from '@inertiajs/vue3';
 import { defineProps } from 'vue';
 
+import {router} from '@inertiajs/vue3';
+
 defineProps({
     data: {
         type: Object,
@@ -14,8 +16,15 @@ defineProps({
     }
 });
 
-// const url = usePage().props.url.split("=")[1];
 
+const updateList = (link) => {
+    const pageNumber = link.url.split("=")[1];
+    if (pageNumber) {
+        router.visit('/students?page=' + pageNumber,{
+            preserveScroll: true,
+        });
+    }
+};
 
 
 </script>
@@ -31,15 +40,9 @@ defineProps({
         <!-- Pagination Buttons (Right) -->
         <div class="flex space-x-1">
             <button v-for="link in data.meta.links" :key="link.label" :class="['px-3', 'py-1', 'bg-gray-200', 'text-gray-700', 'rounded', 'hover:bg-gray-300', { 'bg-blue-500': link.url==null }]"
-                    @click="link.url ? $emit('page-changed', link.url) : null">
+                    @click="updateList(link)">
                <span v-html="link.label"></span>
             </button>
-
-            <!-- <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">&laquo;</button>
-            <button class="px-3 py-1 bg-blue-500 text-white rounded">1</button>
-            <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">2</button>
-            <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">3</button>
-            <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">&raquo;</button> -->
         </div>
     </div>
 </template>
