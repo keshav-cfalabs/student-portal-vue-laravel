@@ -4,6 +4,7 @@ namespace App\Http\Controllers\students;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
+use App\Http\Requests\UpdateStudentRequest;
 use App\Http\Resources\ClassesResource;
 use App\Http\Resources\StudentResource;
 use App\Models\Classes;
@@ -15,7 +16,14 @@ class StudentController extends Controller
 
     public function index()
     {
-        $students = StudentResource::collection(Student::query()->with(['class', 'section'])->paginate(10));
+      
+           $students = Student::query()
+           ->when(request('search'), function ($query) {
+               $query->where('name', 'like', '%' . request('search') . '%')
+                     ->orWhere('email', 'like', '%' . request('search') . '%');
+           })
+           ->with(['class', 'section'])->paginate(10);
+        $students = StudentResource::collection($students);
         return inertia('Students/Index', [
             'students' => $students,
         ]);
@@ -55,15 +63,20 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
+        return inertia('Students/Edit', [
+            'student' => new StudentResource($student->load(['class', 'section'])),
+            'classes' => ClassesResource::collection(Classes::all())
+        ]);
        
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateStudentRequest $request, Student $student)
     {
-        //
+        $student->update($request->validated());
+        return redirect()->route('students.index')->with('success', 'Student updated successfully.');
     }
 
     /**
